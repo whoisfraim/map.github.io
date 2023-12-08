@@ -36,8 +36,7 @@ window.addEventListener('load',() => {
     },
     () => {
       alert('Включи геолокацию!')
-    },
-    { enableHighAccuracy: true }
+    }
   );
 
   const menu = new MaterialMenu(document.querySelector('.mdl-menu'));
