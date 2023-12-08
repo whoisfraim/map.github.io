@@ -1,3 +1,10 @@
+const removeLoadScreen = () => {
+  setTimeout(() => {
+    document.querySelector('.load-screen').remove();
+    document.querySelector('.loaded').style.visibility = 'visible';
+  }, 1000);
+}
+
 window.addEventListener('load',() => {
   const mapContainer = document.querySelector('.map');
 
@@ -28,19 +35,17 @@ window.addEventListener('load',() => {
       map.setView(latLng, 20, { animate: true });
       myIcon = L.icon({ iconUrl: 'meIcon.png', iconSize: [40, 40] });
       L.marker(latLng, { icon: myIcon }).addTo(map);
+      removeLoadScreen();
     },
-    (e) => {
-      alert(e.message, e.code, e.TIMEOUT, e.PERMISSION_DENIED, e.POSITION_UNAVAILABLE)
-      alert(e.code)
-      alert(e.TIMEOUT)
-      alert(e.PERMISSION_DENIED)
-      alert(e.POSITION_UNAVAILABLE)
+    () => {
+      alert('Не удалось получиться местоположение!')
+      removeLoadScreen();
     },
     { timeout: 5000 }
   );
 
   const menu = new MaterialMenu(document.querySelector('.mdl-menu'));
-  const button = new MaterialButton(document.querySelector('.tiles'));
+  const tilesButton = document.querySelector('.tiles');
 
   menu.element_.addEventListener('click', e => {
     if (e.target.hasAttribute('data-layer')) {
@@ -57,12 +62,7 @@ window.addEventListener('load',() => {
     }
   });
 
-  button.element_.addEventListener('click', () => {
+  tilesButton.addEventListener('click', () => {
       menu.toggle();
   });
-
-  setTimeout(() => {
-    document.querySelector('.load-screen').remove();
-    document.querySelector('.loaded').style.visibility = 'visible';
-  }, 1000);
 })
