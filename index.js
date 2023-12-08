@@ -34,9 +34,10 @@ window.addEventListener('load',() => {
         document.querySelector('.loaded').style.visibility = 'visible';
       }, 1000);
     },
-    () => {
-      alert('Включи геолокацию!')
-    }
+    (e) => {
+      alert(e, 'Включи геолокацию!')
+    },
+    { timeout: 5000 }
   );
 
   const menu = new MaterialMenu(document.querySelector('.mdl-menu'));
