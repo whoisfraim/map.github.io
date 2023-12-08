@@ -35,7 +35,7 @@ window.addEventListener('load',() => {
       }, 1000);
     },
     (e) => {
-      alert(e, 'Включи геолокацию!')
+      alert(JSON.stringify(e), 'Включи геолокацию!')
     },
     { timeout: 5000 }
   );
