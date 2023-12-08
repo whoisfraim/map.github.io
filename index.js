@@ -28,14 +28,13 @@ window.addEventListener('load',() => {
       map.setView(latLng, 20, { animate: true });
       myIcon = L.icon({ iconUrl: 'meIcon.png', iconSize: [40, 40] });
       L.marker(latLng, { icon: myIcon }).addTo(map);
-
-      setTimeout(() => {
-        document.querySelector('.load-screen').remove();
-        document.querySelector('.loaded').style.visibility = 'visible';
-      }, 1000);
     },
     (e) => {
-      alert(JSON.stringify(e), 'Включи геолокацию!')
+      alert(e.message, e.code, e.TIMEOUT, e.PERMISSION_DENIED, e.POSITION_UNAVAILABLE)
+      alert(e.code)
+      alert(e.TIMEOUT)
+      alert(e.PERMISSION_DENIED)
+      alert(e.POSITION_UNAVAILABLE)
     },
     { timeout: 5000 }
   );
@@ -61,4 +60,9 @@ window.addEventListener('load',() => {
   button.element_.addEventListener('click', () => {
       menu.toggle();
   });
+
+  setTimeout(() => {
+    document.querySelector('.load-screen').remove();
+    document.querySelector('.loaded').style.visibility = 'visible';
+  }, 1000);
 })
