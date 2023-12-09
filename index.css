@@ -79,7 +79,7 @@ html, body { height: 100%; margin: 0px; padding: 0px; position: relative }
 }
 
 .mdl-list {
-  margin-top: 30px;
+  margin-top: 34px;
 }
 
 li {
@@ -92,4 +92,6 @@ li {
 
 .mdl-list__item {
   gap: 8px;
+  padding: 0;
+  padding-top: 16px;
 }
