@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <!--css-->
+
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -25,7 +25,56 @@
       href="./index.css"
     />
 
-    <!--scripts-->
+    <title>Map</title>
+</head>
+<body>
+    <div id="load-screen">
+        <div class="loader mdl-spinner mdl-js-spinner is-active"></div>
+    </div>
+
+    <div id="loaded-screen">
+        <div id="map"></div>
+
+        <div class="actions-wrapper">
+            <div class="search-button-container">
+                <button id="search-button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+                    <span class="material-symbols-outlined">search</span>
+                </button>
+            </div>
+
+            <div class="tiles-button-container">
+                <button id="tiles-button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+                    <i class="material-icons">layers</i>
+                </button>
+            </div>
+            <div class="tiles-menu-container">
+                <ul id="tiles-menu" class="mdl-menu mdl-menu--bottom-right">
+                    <li class="mdl-menu__item" data-layer="$2gis">2GIS</li>
+                    <li class="mdl-menu__item" data-layer="$google">Google</li>
+                </ul>
+            </div>
+
+            <div class="geolocation-button-container">
+                <button data-enabled="false" id="geolocation-button"
+                        class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+                    <span class="material-symbols-outlined">near_me</span>
+                </button>
+            </div>
+        </div>
+
+        <dialog class="mdl-dialog" id="search-dialog-content">
+            <div class="dialog-content">
+                <form id="searh-form" action="" onsubmit="return false;">
+                    <div class="search-input-container mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input search-input" type="search" id="search-input">
+                        <label class="mdl-textfield__label search-label" for="search-input">Поиск...</label>
+                    </div>
+                </form>
+                <ul id="suggestion-list" class="mdl-list"></ul>
+            </div>
+        </dialog>
+    </div>
+
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -39,54 +88,6 @@
             referrerpolicy="no-referrer">
     </script>
 
-
-    <title>Map</title>
-</head>
-<body>
-<div class="load-screen">
-    <div class="mdl-spinner mdl-js-spinner is-active"></div>
-</div>
-
-<div class="loaded">
-    <div class="map"></div>
-
-    <div class="wrapper">
-        <div>
-            <button class="tiles mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-                <i class="material-icons">layers</i>
-            </button>
-        </div>
-
-        <div>
-            <button class="search mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-                <span class="material-symbols-outlined">search</span>
-            </button>
-        </div>
-
-        <div>
-            <ul class="mdl-menu mdl-menu--bottom-right">
-                <li class="mdl-menu__item" data-layer="$2gis">2GIS</li>
-                <li class="mdl-menu__item" data-layer="$google">Google</li>
-            </ul>
-        </div>
-    </div>
-
-    <dialog class="mdl-dialog search-content">
-        <div class="dialog-content">
-            <form id="searh-form" action="" onsubmit="return false;">
-                <div class="mdl-textfield mdl-js-textfield">
-                    <input class="mdl-textfield__input search-input" type="search" id="search-input">
-                    <label class="mdl-textfield__label search-label" for="search-input">Поиск...</label>
-                </div>
-            </form>
-
-
-            <ul class="mdl-list">
-            </ul>
-        </div>
-    </dialog>
-</div>
-
-<script src="./index.js"></script>
+    <script src="index.js" type="module"></script>
 </body>
 </html>
