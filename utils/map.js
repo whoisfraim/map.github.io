@@ -26,7 +26,9 @@ export const initMap = () => {
   })
 };
 
-const switchMapLayer = (condition) => {
+export const switchMapLayer = (condition) => {
+  const { map, layers } = state;
+
   switch (condition) {
     case '$2gis':
       map.removeLayer(layers.$google);

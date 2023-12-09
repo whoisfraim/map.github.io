@@ -1,6 +1,6 @@
 import state from '../state.js';
 
-import { disableGeolocation, requestGeocodeByQuery } from './map.js';
+import { disableGeolocation, requestGeocodeByQuery, switchMapLayer } from './map.js';
 
 export const removeLoadScreen = () => {
   const { $loadScreen, $loadedScreen } = state.documentObjects;
