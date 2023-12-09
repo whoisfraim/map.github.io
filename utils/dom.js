@@ -1,6 +1,6 @@
 import state from '../state.js';
 
-import { disableGeolocation, requestGeocodeByQuery, switchMapLayer } from './map.js';
+import { requestGeocodeByQuery, switchMapLayer, toggleGeolocation } from './map.js';
 
 export const removeLoadScreen = () => {
   const { $loadScreen, $loadedScreen } = state.documentObjects;
@@ -58,8 +58,10 @@ export const initDOM = () => {
       target.close()
     } else if (target.nodeName === 'SPAN') {
       const pos = JSON.parse(target.getAttribute('data-pos'));
+
       map.setView(pos, 20, { animate: true });
       documentObjects.$searchDialog.close();
+
     }
   });
 
@@ -68,24 +70,21 @@ export const initDOM = () => {
   });
 
   // tiles
-  documentObjects.$tilesButton.addEventListener('click', () => menu.toggle());
+  documentObjects.$tilesButton.addEventListener('click', menu.toggle);
 
-  documentObjects.$tilesMenu.addEventListener('click', e => {
-    if (e.target.hasAttribute('data-layer')) {
-      switchMapLayer(e.target.getAttribute('data-layer'))
+  documentObjects.$tilesMenu.addEventListener('click', ({ target: { getAttribute } = {} }) => {
+    if (getAttribute && !!getAttribute('data-layer')) {
+      switchMapLayer(getAttribute('data-layer'))
     }
   });
 
   // geolocation
-  documentObjects.$geolocationButton.addEventListener('click', (e) => {
-    if (!JSON.parse(e.currentTarget.getAttribute('data-enabled'))) {
-      e.currentTarget.setAttribute('data-enabled', true);
-      map.locate({ watch: true, setView: true, timeout: 5000, enableHighAccuracy: true });
-      return;
-    }
-
-    disableGeolocation();
-  });
+  documentObjects.$geolocationButton.addEventListener('dblclick', toggleGeolocation(true));
+  documentObjects.$geolocationButton.addEventListener('click', toggleGeolocation());
 
   removeLoadScreen();
 };
+
+export const changeGeolocationButtonDataEnabled = (data) => (
+  state.documentObjects.$geolocationButton.setAttribute('data-enabled', data)
+);

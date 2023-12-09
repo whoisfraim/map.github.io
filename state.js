@@ -20,6 +20,7 @@ export default {
       center: [45.05853056136878, 38.97168592724484],
       zoom: 11,
       renderer: L.canvas(),
+      touchZoom: true,
     },
   ),
   layers: {
@@ -42,4 +43,5 @@ export default {
     defaultMarkGeocode: false,
     showUniqueResult: true,
   }),
+  geolocationIsEnabled: false,
 }

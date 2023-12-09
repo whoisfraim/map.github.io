@@ -1,5 +1,7 @@
 import state from '../state.js';
+
 import { throttle } from './utils.js';
+import { changeGeolocationButtonDataEnabled } from './dom.js';
 
 export const initMap = () => {
   if (state.appLoading) return;
@@ -9,20 +11,19 @@ export const initMap = () => {
   map.addLayer(layers.$2gis);
 
   map.on('locationfound', ({ latlng }) => {
-    map.setZoom(20);
 
     if (geolocationLayers.me || geolocationLayers.radius) {
       map.removeLayer(geolocationLayers.me);
       map.removeLayer(geolocationLayers.radius);
     }
 
-    geolocationLayers.radius = getMeMarker(latlng).addTo(map);
     geolocationLayers.me = getMeRadiusMarker(latlng).addTo(map);
+    geolocationLayers.radius = getMeMarker(latlng).addTo(map);
   });
 
   map.on('locationerror', () => {
     alert('Не удалось получить геолокацию!');
-    disableGeolocation();
+    toggleGeolocation();
   })
 };
 
@@ -41,14 +42,21 @@ export const switchMapLayer = (condition) => {
   }
 };
 
-export const disableGeolocation = () => {
-  const { documentObjects, map } = state;
+export const toggleGeolocation = (watch = false) => () => {
+  const { map, geolocationIsEnabled } = state;
 
-  if (documentObjects?.$geolocationButton?.hasAttribute('data-enabled')) {
-    documentObjects.$geolocationButton.setAttribute('data-enabled', false);
+  if (geolocationIsEnabled) {
+    map.stopLocate();
+    changeGeolocationButtonDataEnabled(false);
+    state.geolocationIsEnabled = false;
+    return;
   }
 
-  map.stopLocate();
+  if (watch) {
+    changeGeolocationButtonDataEnabled(true);
+    state.geolocationIsEnabled = true;
+  }
+  map.locate({ watch, setView: true, timeout: 5000, enableHighAccuracy: true });
 };
 
 export const requestGeocodeByQuery = throttle((query, successCallback) => {
