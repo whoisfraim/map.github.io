@@ -71,9 +71,9 @@ html, body { height: 100%; margin: 0px; padding: 0px; position: relative }
 
 #searh-form {
   position: fixed;
-  left: 10px;
+  left: 0;
   top: 0;
-  width: 95%;
+  width: 100%;
   background: #fff;
   z-index: 1;
 }
@@ -92,6 +92,14 @@ li {
 
 .mdl-list__item {
   gap: 8px;
-  padding: 0;
-  padding-top: 16px;
+  padding: 16px 0 8px 0 ;
+}
+
+.search-input {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.search-label {
+  padding-left: 8px;
 }
