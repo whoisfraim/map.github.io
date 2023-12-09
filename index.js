@@ -5,7 +5,7 @@ const removeLoadScreen = () => {
   }, 1000);
 }
 
-window.addEventListener('load',() => {
+const initMap = () => {
   const mapContainer = document.querySelector('.map');
 
   const map = L.map(mapContainer, {
@@ -27,25 +27,47 @@ window.addEventListener('load',() => {
     }),
   }
 
+  const geolocationLayers = {
+    me: null,
+    radius: null,
+  };
+
   layers.$2gis.addTo(map);
+
+  return { map, layers, geolocationLayers };
+};
+
+const getMeMarker = (pos) => L.circleMarker(pos, { radius: 25, color: '#536dfe', stroke: false, fillOpacity: 0.3 });
+const getMeRadiusMarker = (pos) => L.circleMarker(pos, { radius: 10, color: '#ff1744', stroke: false, fillOpacity: 1 });
+
+window.addEventListener('load',() => {
+  const { map, layers, geolocationLayers } = initMap();
 
   navigator.geolocation.getCurrentPosition(
     ({ coords }) => {
-      const latLng = L.latLng(coords.latitude, coords.longitude);
-      map.setView(latLng, 20, { animate: true });
-      myIcon = L.icon({ iconUrl: 'meIcon.png', iconSize: [40, 40] });
-      L.marker(latLng, { icon: myIcon }).addTo(map);
+      const pos = L.latLng(coords.latitude, coords.longitude);
+
+      if (geolocationLayers.me || geolocationLayers.radius) {
+        map.removeLayer(geolocationLayers.me);
+        map.removeLayer(geolocationLayers.radius);
+      }
+
+      geolocationLayers.radius = getMeMarker(pos).addTo(map);
+      geolocationLayers.me = getMeRadiusMarker(pos).addTo(map);
+
+      map.setView(pos, 20, { animate: true });
+
       removeLoadScreen();
     },
     () => {
       alert('Не удалось получиться местоположение!')
       removeLoadScreen();
     },
-    { timeout: 5000 }
+    { timeout: 5000, enableHighAccuracy: true, },
   );
 
   const menu = new MaterialMenu(document.querySelector('.mdl-menu'));
-  const tilesButton = document.querySelector('.tiles');
+  const $tilesButton = document.querySelector('.tiles');
 
   menu.element_.addEventListener('click', e => {
     if (e.target.hasAttribute('data-layer')) {
@@ -62,7 +84,7 @@ window.addEventListener('load',() => {
     }
   });
 
-  tilesButton.addEventListener('click', () => {
+  $tilesButton.addEventListener('click', () => {
       menu.toggle();
   });
 })
