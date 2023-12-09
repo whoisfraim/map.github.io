@@ -84,7 +84,8 @@ window.addEventListener('load',() => {
     }
   });
 
-  $tilesButton.addEventListener('click', () => {
+  $tilesButton.addEventListener('click', (e) => {
+      alert(JSON.stringify(e.target))
       menu.toggle();
   });
 })
