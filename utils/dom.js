@@ -1,7 +1,5 @@
 import state from '../constants/state.js';
 
-import { ESuggestionTypes } from '../constants/enums.js';
-
 import { compose, eventStopPropagation, onDoubleTap } from './utils.js';
 
 import {
@@ -9,10 +7,10 @@ import {
   switchMapLayer,
   toggleGeolocation,
   setActiveMarker,
-  clearActiveMarker
+  clearActiveMarker,
 } from './map.js';
 
-import { defaultTemplate, getHouse } from './addressTemplates.js';
+import { getSuggestionsListItemTemplate } from './templates.js';
 
 export const initDOM = () => {
   if (state.appLoading) return;
@@ -23,7 +21,7 @@ export const initDOM = () => {
 
   // search
   if (!documentObjects.$searchDialog.showModal) {
-    dialogPolyfill.registerDialog(dialog);
+    dialogPolyfill.registerDialog(documentObjects.$searchDialog);
   }
 
   documentObjects.$searchButton.addEventListener(
@@ -31,7 +29,7 @@ export const initDOM = () => {
     documentObjects.$searchDialog.showModal.bind(documentObjects.$searchDialog),
   );
 
-  documentObjects.$searchDialog.addEventListener('click', function ({ target }) {
+  documentObjects.$searchDialog.addEventListener('click', ({ target }) => {
     if (target.nodeName === 'DIALOG') {
       target.close()
     } else if (target.getAttribute('id') === 'location-button') {
@@ -80,41 +78,8 @@ const renderSearchResult = (data) => {
   }
 
   $suggestionList
-    .innerHTML = data.map(({ center, properties, name }) => {
-      return `
-        <li class="mdl-list__item">
-          <div class="mdl-list__item-primary-content" id="suggestions-wrapper">
-            ${renderAddressInfoByType(properties, name)}
-          </div>
-          <div>
-            <button
-              id="location-button"
-              class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-              <img
-                src="/static/pin_drop.svg"
-                id="location-icon"
-                data-position="[${center.lat}, ${center.lng}]"
-              />
-            </button>
-          </div>
-          <div>
-            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-              <img src="/static/add.svg" />
-            </button>
-          </div>
-        </li>
-      `
-    })
+    .innerHTML = data.map(getSuggestionsListItemTemplate)
     .join('');
-}
-
-export const renderAddressInfoByType = (data, name) => {
-  switch (data.type) {
-    case ESuggestionTypes.house:
-      return getHouse(data);
-    default:
-      return defaultTemplate(data);
-  }
 }
 
 const onClickFindPosition = (target) => {
