@@ -37,12 +37,12 @@ export default {
     $2gis: L?.tileLayer('http://tile2.maps.2gis.com/tiles?x={x}&y={y}&z={z}', {
       subdomains:['mt0','mt1','mt2','mt3'],
       reuseTiles: true,
-      updateWhenIdle: false
+      updateWhenIdle: false,
     }),
     $google: L?.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
       subdomains:['mt0','mt1','mt2','mt3'],
       reuseTiles: true,
-      updateWhenIdle: false
+      updateWhenIdle: false,
     }),
   },
   icons: {
