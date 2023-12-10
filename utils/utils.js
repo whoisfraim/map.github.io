@@ -13,3 +13,5 @@ export const debounce = (func, ms) => {
     timeout = setTimeout(() => func.apply(this, arguments), ms);
   };
 };
+
+export const eventStopPropagation = (e) => (console.log(e), e.stopPropagation());

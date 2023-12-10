@@ -2,6 +2,8 @@ import state from '../state.js';
 
 import { ESuggestionTypes } from './enums.js';
 
+import { compose, eventStopPropagation } from './utils.js';
+
 import {
   requestGeocodeByQuery,
   switchMapLayer,
@@ -111,13 +113,15 @@ const onClickFindPosition = (target) => {
   const position = JSON.parse(target.getAttribute('data-position'));
   const button = document.createElement('button');
   button.className = 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent';
-  button.addEventListener('click', clearActiveMarker);
+  button.addEventListener('click', compose(clearActiveMarker, eventStopPropagation));
   button.innerText = 'Удалить';
-  const tooltipContent = `
-    ${target.closest('.mdl-list__item').children[0].innerHTML}
-    <br />
-    ${button.outerHTML}
-  `;
+  const tooltipContent = document.createElement('div');
+  const info = document.createElement('div');
+  info.innerHTML = target.closest('.mdl-list__item').children[0].outerHTML;
+  tooltipContent.append(
+    info,
+    button
+  );
   setActiveMarker(position, tooltipContent);
   state.documentObjects.$searchDialog.close();
 };
