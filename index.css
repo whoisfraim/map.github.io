@@ -6,6 +6,12 @@ html, body {
     background-color: #FAFAFA
 }
 
+.mdl-button--colored {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .leaflet-control-attribution {
     display: none;
 }
@@ -90,10 +96,6 @@ li {
     list-style-type: none;
 }
 
-.material-symbols-outlined {
-    margin-top: 3px;
-}
-
 .mdl-list__item {
     gap: 8px;
     padding: 16px 0 8px 0;
@@ -149,9 +151,4 @@ li {
     text-align: center;
     font-size: 18px;
     visibility: hidden;
-}
-
-.error-icon {
-    font-size: 50px;
-    color: rgb(244, 67, 54);
 }

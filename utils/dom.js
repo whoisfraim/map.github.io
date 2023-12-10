@@ -90,15 +90,16 @@ const renderSearchResult = (data) => {
             <button
               id="location-button"
               class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-              <span
-                  id="location-icon"
-                  data-position="[${center.lat}, ${center.lng}]"
-                  class="material-symbols-outlined">location_on</span>
+              <img
+                src="/static/pin_drop.svg"
+                id="location-icon"
+                data-position="[${center.lat}, ${center.lng}]"
+              />
             </button>
           </div>
           <div>
             <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-              <span class="material-symbols-outlined">add</span>
+              <img src="/static/add.svg" />
             </button>
           </div>
         </li>

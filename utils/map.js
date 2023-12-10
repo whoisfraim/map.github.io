@@ -16,24 +16,21 @@ export const initMap = () => {
   const storageLayerKey = localStorage.getItem('data-layer') || EMapLayersKeys.$2gis;
   map.addLayer(layers[storageLayerKey]);
 
-  map.on('locationfound', ({ latlng }) => {
+  map.on('locationfound', ({ latlng, accuracy }) => {
     if (state.geolocationIsFirstLocation) {
       map.setView(latlng, 20);
       state.geolocationIsFirstLocation = false;
     }
 
-    if (geolocationLayers.me || geolocationLayers.radius) {
-      map.removeLayer(geolocationLayers.me);
-      map.removeLayer(geolocationLayers.radius);
-    }
+    clearGeolocationMarker();
 
     geolocationLayers.me = getMeRadiusMarker(latlng).addTo(map);
     geolocationLayers.radius = getMeMarker(latlng).addTo(map);
   });
 
   map.on('locationerror', () => {
+    alert('Не удалось получить геолокацию!');
     if (state.geolocationIsEnabled) {
-      alert('Не удалось получить геолокацию!');
       toggleGeolocation();
     }
   })
@@ -54,10 +51,18 @@ export const switchMapLayer = (condition) => {
   }
 };
 
+export const clearGeolocationMarker = () => {
+  if (!state.geolocationLayers.me && !state.geolocationLayers.radius) return;
+
+  state.map.removeLayer(state.geolocationLayers.me);
+  state.map.removeLayer(state.geolocationLayers.radius);
+}
+
 export const disableGeolocation = () => {
   state.map.stopLocate();
-  changeGeolocationButtonDataEnabled(false);
   state.geolocationIsEnabled = false;
+  clearGeolocationMarker();
+  changeGeolocationButtonDataEnabled(false);
 }
 
 export const toggleGeolocation = (watch = false) => {
