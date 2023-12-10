@@ -14,4 +14,24 @@ export const debounce = (func, ms) => {
   };
 };
 
-export const eventStopPropagation = (e) => (console.log(e), e.stopPropagation());
+export const eventStopPropagation = (e) => e.stopPropagation();
+
+export const onDoubleTap = (onSingleTap, onDoubleTap) => {
+  let timer = null;
+
+  return (event) => {
+    if (!timer) {
+      timer = setTimeout(() => {
+        if (onSingleTap) {
+          onSingleTap(event);
+        }
+        timer = null;
+      }, 300);
+      return
+    }
+
+    clearTimeout(timer);
+    timer = null;
+    onDoubleTap && onDoubleTap(event);
+  };
+};

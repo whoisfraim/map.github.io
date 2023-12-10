@@ -2,7 +2,7 @@ import state from '../state.js';
 
 import { ESuggestionTypes } from './enums.js';
 
-import { compose, eventStopPropagation } from './utils.js';
+import { compose, eventStopPropagation, onDoubleTap } from './utils.js';
 
 import {
   requestGeocodeByQuery,
@@ -57,8 +57,13 @@ export const initDOM = () => {
   });
 
   // geolocation
-  documentObjects.$geolocationButton.addEventListener('dblclick', toggleGeolocation.bind(null, true));
-  documentObjects.$geolocationButton.addEventListener('click', toggleGeolocation.bind(null, false));
+  documentObjects.$geolocationButton.addEventListener(
+    'click',
+    onDoubleTap(
+      toggleGeolocation.bind(null, false),
+      toggleGeolocation.bind(null, true),
+    ),
+  );
 
   hideLoadScreen();
 };
