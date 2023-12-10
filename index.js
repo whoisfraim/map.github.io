@@ -1,4 +1,4 @@
-import state from './state.js';
+import state from './constants/state.js';
 
 window.addEventListener('load', async () => {
   state.appLoading = false;

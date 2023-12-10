@@ -1,6 +1,6 @@
-import state from '../state.js';
+import state from '../constants/state.js';
 
-import { ESuggestionTypes } from './enums.js';
+import { ESuggestionTypes } from '../constants/enums.js';
 
 import { compose, eventStopPropagation, onDoubleTap } from './utils.js';
 
@@ -42,9 +42,9 @@ export const initDOM = () => {
   });
 
   documentObjects.$searchInput.addEventListener('input', ({ target: { value } }) => {
-    if (!value) return renderSearchResult();
-
-    requestGeocodeByQuery(value, showSearchLoading, renderSearchResult, showSearchError, hideSearchLoading);
+    state.searchQuery = value;
+    if (!state.searchQuery) renderSearchResult();
+    requestGeocodeByQuery(state.searchQuery, showSearchLoading, renderSearchResult, showSearchError, hideSearchLoading);
   });
 
   // tiles
@@ -127,7 +127,8 @@ const onClickFindPosition = (target) => {
   button.addEventListener('click', compose(clearActiveMarker, eventStopPropagation));
   button.innerText = 'Удалить';
 
-  info.innerHTML = target.closest('.mdl-list__item').children[0].outerHTML;
+  info.innerHTML = target.closest('.mdl-list__item').children[0].innerHTML;
+  info.style.marginBottom = '8px'
 
   tooltipContent.append(info, button);
 

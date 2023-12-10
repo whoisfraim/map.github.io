@@ -1,16 +1,20 @@
-import state from '../state.js';
+import state from '../constants/state.js';
+
+import { EMapLayersKeys } from '../constants/enums.js';
 
 import { debounce } from './utils.js';
-import { changeGeolocationButtonDataEnabled } from './dom.js';
+
 import { getSuggestions } from './api.js';
+
+import { changeGeolocationButtonDataEnabled } from './dom.js';
 
 export const initMap = () => {
   if (state.appLoading) return;
 
   const { map, layers, geolocationLayers } = state;
 
-  const storageLayerKey = localStorage.getItem('data-layer');
-  map.addLayer(layers[storageLayerKey || layers.$2gis]);
+  const storageLayerKey = localStorage.getItem('data-layer') || EMapLayersKeys.$2gis;
+  map.addLayer(layers[storageLayerKey]);
 
   map.on('locationfound', ({ latlng }) => {
     if (state.geolocationIsFirstLocation) {
@@ -76,6 +80,8 @@ export const requestGeocodeByQuery = debounce((
   errorCallback,
   finallyCallback,
 ) => {
+  if (state.searchLoading || !query) return;
+
   const { lat, lng } = state.map.getCenter();
 
   const searchParams = {
@@ -85,9 +91,7 @@ export const requestGeocodeByQuery = debounce((
     limit: 5,
   };
 
-  if (!state.searchLoading) {
-    getSuggestions(searchParams, requestCallback, successCallback, errorCallback, finallyCallback);
-  }
+  getSuggestions(searchParams, requestCallback, successCallback, errorCallback, finallyCallback);
 }, 1000);
 
 export const setView = (position, zoom) => state.map.setView(position, zoom, { animate: true });

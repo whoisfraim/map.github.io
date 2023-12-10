@@ -1,3 +1,5 @@
+import { EMapLayersKeys } from './enums.js';
+
 const $mapContainer = document.querySelector('#map');
 
 export default {
@@ -19,7 +21,7 @@ export default {
     $geolocationButton: document.querySelector('#geolocation-button'),
     $searchDialog: document.querySelector('#search-dialog-content'),
     $searchInput: document.querySelector('#search-input'),
-    $searchLoader: document.querySelector('#search-loader'),
+    $searchLoader: document.querySelector('#search-loader-container'),
     $searchError: document.querySelector('#search-error'),
     $suggestionList: document.querySelector('#suggestions-list'),
   },
@@ -34,12 +36,12 @@ export default {
     },
   ),
   layers: {
-    $2gis: L?.tileLayer('https://tile2.maps.2gis.com/tiles?x={x}&y={y}&z={z}', {
+    [EMapLayersKeys.$2gis]: L?.tileLayer('https://tile2.maps.2gis.com/tiles?x={x}&y={y}&z={z}', {
       subdomains:['mt0','mt1','mt2','mt3'],
       reuseTiles: true,
       updateWhenIdle: false,
     }),
-    $google: L?.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+    [EMapLayersKeys.$google]: L?.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
       subdomains:['mt0','mt1','mt2','mt3'],
       reuseTiles: true,
       updateWhenIdle: false,
@@ -74,5 +76,6 @@ export default {
   },
   geolocationIsEnabled: false,
   geolocationIsFirstLocation: true,
+  searchQuery: '',
   activeMarker: null,
 }

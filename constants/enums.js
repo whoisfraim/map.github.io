@@ -1,3 +1,8 @@
+export const EMapLayersKeys = {
+  $2gis: '$2gis',
+  $google: '$google'
+}
+
 export const ESuggestionTypes = {
   house: 'house',
   street: 'street',
@@ -20,7 +25,7 @@ export const EMappedSuggestionTypes = {
   state: 'обл.',
   country: 'страна',
   postcode: 'почтовый индекс'
-}
+};
 
 export const ESuggestionPropertiesForTranslate = [
   ESuggestionTypes.country,

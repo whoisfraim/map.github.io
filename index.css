@@ -1,147 +1,157 @@
-html, body { height: 100%; margin: 0px; padding: 0px; position: relative }
+html, body {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+    background-color: #FAFAFA
+}
 
 .leaflet-control-attribution {
-  display: none;
+    display: none;
 }
 
 #load-screen {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
 }
 
 .loader {
-  width: 60px;
-  height: 60px;
+    width: 60px;
+    height: 60px;
 }
 
 #loaded-screen {
-  width: 100%;
-  height: 100%;
-  visibility: hidden;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
 }
 
 #map {
-  width: 100%;
-  height: 100%;
-  display: flex;
+    width: 100%;
+    height: 100%;
+    display: flex;
 }
 
 .actions-wrapper {
-  position: fixed;
-  top: 8px;
-  right: 8px;
-  width: auto;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 999;
+    position: fixed;
+    top: 8px;
+    right: 8px;
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 999;
 }
 
 .tiles-menu-container {
-  top: 80px;
-  right: 190px;
-  position: absolute;
+    top: 80px;
+    right: 190px;
+    position: absolute;
 }
 
 #search-dialog-content {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  max-width: 100%;
-  max-height: 100%;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    max-height: 100%;
+    background-color: #FAFAFA;
 }
 
 .dialog-content {
-  padding: 1em;
+    padding: 1em;
 }
 
 .search-input-container {
-  width: 100%;
+    width: 100%;
+    background-color: #FAFAFA;
 }
 
 #searh-form {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  background: #fff;
-  z-index: 1;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 1;
 }
 
 #suggestions-list {
-  margin-top: 34px;
+    margin-top: 34px;
 }
 
 li {
-  list-style-type: none;
+    list-style-type: none;
 }
 
 .material-symbols-outlined {
-  margin-top: 3px;
+    margin-top: 3px;
 }
 
 .mdl-list__item {
-  gap: 8px;
-  padding: 16px 0 8px 0 ;
+    gap: 8px;
+    padding: 16px 0 8px 0;
+    align-items: flex-start;
 }
 
 .search-input {
-  padding-left: 8px;
-  padding-right: 8px;
+    padding-left: 0.8em;
+    padding-right: 0.8em;
 }
 
 .search-label {
-  padding-left: 8px;
+    padding-left: 0.8em;
 }
 
 #geolocation-button[data-enabled="false"] {
-  background: rgb(83,109,254);
+    background: rgb(83, 109, 254);
 }
 
 #geolocation-button[data-enabled="true"] {
-  background: rgb(244, 67, 54);
+    background: rgb(244, 67, 54);
 }
 
 #suggestions-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 4px;
 }
 
-.search-loader-container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+#search-loader-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
 }
 
 #search-error {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  text-align: center;
-  font-size: 18px;
-  visibility: hidden;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    visibility: hidden;
 }
 
 .error-icon {
-  font-size: 50px;
-  color: rgb(244, 67, 54);
+    font-size: 50px;
+    color: rgb(244, 67, 54);
 }

@@ -8,9 +8,9 @@ export const reverseCurrying = (fn, ...args) => (..._args) => fn(..._args, ...ar
 
 export const debounce = (func, ms) => {
   let timeout;
-  return function() {
+  return (...args) => {
     clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, arguments), ms);
+    timeout = setTimeout(() => func.apply(this, args), ms);
   };
 };
 

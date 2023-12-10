@@ -1,8 +1,8 @@
 import translate from '../scripts/translate.js';
 
-import state from '../state.js';
+import state from '../constants/state.js';
 
-import { ESuggestionPropertiesForTranslate } from './enums.js';
+import { ESuggestionPropertiesForTranslate } from '../constants/enums.js';
 
 import { compose, every, reverseCurrying } from './utils.js';
 
