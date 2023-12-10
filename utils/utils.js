@@ -26,8 +26,8 @@ export const onDoubleTap = (onSingleTap, onDoubleTap) => {
           onSingleTap(event);
         }
         timer = null;
-      }, 300);
-      return
+      }, 200);
+      return;
     }
 
     clearTimeout(timer);
