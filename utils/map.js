@@ -12,15 +12,13 @@ export const initMap = () => {
   map.addLayer(layers.$2gis);
 
   map.on('locationfound', ({ latlng }) => {
-    if (state.geolocationIsEnabled) {
-      if (geolocationLayers.me || geolocationLayers.radius) {
-        map.removeLayer(geolocationLayers.me);
-        map.removeLayer(geolocationLayers.radius);
-      }
-
-      geolocationLayers.me = getMeRadiusMarker(latlng).addTo(map);
-      geolocationLayers.radius = getMeMarker(latlng).addTo(map);
+    if (geolocationLayers.me || geolocationLayers.radius) {
+      map.removeLayer(geolocationLayers.me);
+      map.removeLayer(geolocationLayers.radius);
     }
+
+    geolocationLayers.me = getMeRadiusMarker(latlng).addTo(map);
+    geolocationLayers.radius = getMeMarker(latlng).addTo(map);
   });
 
   map.on('locationerror', () => {
@@ -46,36 +44,44 @@ export const switchMapLayer = (condition) => {
   }
 };
 
-export const toggleGeolocation = (watch = false) => () => {
-  const { map, geolocationIsEnabled } = state;
+export const disableGeolocation = () => {
+  state.map.stopLocate();
+  changeGeolocationButtonDataEnabled(false);
+  state.geolocationIsEnabled = false;
+}
 
-  if (geolocationIsEnabled) {
-    map.stopLocate();
-    changeGeolocationButtonDataEnabled(false);
-    state.geolocationIsEnabled = false;
-    return;
+export const toggleGeolocation = (watch = false) => {
+  if (state.geolocationIsEnabled) {
+    return disableGeolocation()
   }
 
   if (watch) {
     changeGeolocationButtonDataEnabled(true);
     state.geolocationIsEnabled = true;
   }
-  map.locate({ watch, setView: true, timeout: 5000, enableHighAccuracy: true });
+  state.map.locate({ watch, setView: true, timeout: 5000, enableHighAccuracy: true });
 };
 
-export const requestGeocodeByQuery = debounce((query, successCallback) => {
-  if (!query) return successCallback([]);
-  const { map } = state;
-  const { lat, lng } = map.getCenter()
+export const requestGeocodeByQuery = debounce((
+  query,
+  requestCallback,
+  successCallback,
+  errorCallback,
+  finallyCallback,
+) => {
+  const { lat, lng } = state.map.getCenter();
 
   const searchParams = {
     q: query,
     lat: lat,
     lon: lng,
+    limit: 5,
   };
 
-  getSuggestions(searchParams, successCallback);
-}, 500);
+  if (!state.searchLoading) {
+    getSuggestions(searchParams, requestCallback, successCallback, errorCallback, finallyCallback);
+  }
+}, 1000);
 
 export const setView = (position, zoom) => state.map.setView(position, zoom, { animate: true });
 
@@ -88,9 +94,11 @@ export const clearActiveMarker = () => {
 }
 
 export const setActiveMarker = (position, title) => {
+  disableGeolocation();
   clearActiveMarker();
-  state.activeMarker = L.marker(position).addTo(state.map).bindPopup(title);
-  state.activeMarker.on('click', state.activeMarker.toggleTooltip)
+  state.activeMarker = L.marker(position, { icon: state.icons.primary }).addTo(state.map).bindPopup(title);
+  state.activeMarker.on('click', state.activeMarker.toggleTooltip);
+  setView(position, 20);
 }
 
 export const getMeMarker = (pos) => L.circleMarker(pos, { radius: 25, color: '#536dfe', stroke: false, fillOpacity: 0.3 });

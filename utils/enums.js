@@ -7,16 +7,27 @@ export const ESuggestionTypes = {
   county: 'county',
   state: 'state',
   country: 'country',
+  name: 'name',
 };
 
 export const EMappedSuggestionTypes = {
   house: 'д.',
   street: 'ул.',
   locality: 'мст.',
-  district: 'округ',
+  district: 'р-н',
   city: 'г.',
-  county: 'округ',
-  state: 'штат',
-  country: 'обл.',
-  postcode: 'Почтовый индекс'
+  county: 'г.о.',
+  state: 'обл.',
+  country: 'страна',
+  postcode: 'почтовый индекс'
 }
+
+export const ESuggestionPropertiesForTranslate = [
+  ESuggestionTypes.country,
+  ESuggestionTypes.city,
+  ESuggestionTypes.county,
+  ESuggestionTypes.street,
+  ESuggestionTypes.district,
+  ESuggestionTypes.state,
+  ESuggestionTypes.name,
+];

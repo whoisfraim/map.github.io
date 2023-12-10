@@ -2,6 +2,8 @@ const $mapContainer = document.querySelector('#map');
 
 export default {
   appLoading: true,
+  searchLoading: false,
+  searchError: false,
   apiOptions: {
     serviceUrl: 'https://photon.komoot.io/api/',
     reverseUrl: 'https://photon.komoot.io/reverse/',
@@ -17,7 +19,9 @@ export default {
     $geolocationButton: document.querySelector('#geolocation-button'),
     $searchDialog: document.querySelector('#search-dialog-content'),
     $searchInput: document.querySelector('#search-input'),
-    $suggestionList: document.querySelector('#suggestion-list'),
+    $searchLoader: document.querySelector('#search-loader'),
+    $searchError: document.querySelector('#search-error'),
+    $suggestionList: document.querySelector('#suggestions-list'),
   },
   map: L.map(
     $mapContainer,
@@ -39,6 +43,29 @@ export default {
       subdomains:['mt0','mt1','mt2','mt3'],
       reuseTiles: true,
       updateWhenIdle: false
+    }),
+  },
+  icons: {
+    red: L.icon({
+      iconUrl: './static/red-marker.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      tooltipAnchor: [16, -28],
+    }),
+    primary: L.icon({
+      iconUrl: './static/primary-marker.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      tooltipAnchor: [16, -28],
+    }),
+    disabled: L.icon({
+      iconUrl: './static/disabled-marker.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      tooltipAnchor: [16, -28],
     }),
   },
   geolocationLayers: {
