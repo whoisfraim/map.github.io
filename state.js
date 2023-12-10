@@ -73,5 +73,6 @@ export default {
     radius: null,
   },
   geolocationIsEnabled: false,
+  geolocationIsFirstLocation: true,
   activeMarker: null,
 }

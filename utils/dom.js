@@ -52,7 +52,9 @@ export const initDOM = () => {
 
   documentObjects.$tilesMenu.addEventListener('click', ({ target }) => {
     if (target.hasAttribute('data-layer')) {
-      switchMapLayer(target.getAttribute('data-layer'))
+      const layerKey = target.getAttribute('data-layer');
+      localStorage.setItem('data-layer', layerKey);
+      switchMapLayer(layerKey);
     }
   });
 
@@ -116,18 +118,21 @@ export const renderAddressInfoByType = (data, name) => {
 
 const onClickFindPosition = (target) => {
   const position = JSON.parse(target.getAttribute('data-position'));
+
   const button = document.createElement('button');
+  const tooltipContent = document.createElement('div');
+  const info = document.createElement('div');
+
   button.className = 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent';
   button.addEventListener('click', compose(clearActiveMarker, eventStopPropagation));
   button.innerText = 'Удалить';
-  const tooltipContent = document.createElement('div');
-  const info = document.createElement('div');
+
   info.innerHTML = target.closest('.mdl-list__item').children[0].outerHTML;
-  tooltipContent.append(
-    info,
-    button
-  );
+
+  tooltipContent.append(info, button);
+
   setActiveMarker(position, tooltipContent);
+
   state.documentObjects.$searchDialog.close();
 };
 

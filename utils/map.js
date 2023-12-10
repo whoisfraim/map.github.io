@@ -9,9 +9,15 @@ export const initMap = () => {
 
   const { map, layers, geolocationLayers } = state;
 
-  map.addLayer(layers.$2gis);
+  const storageLayerKey = localStorage.getItem('data-layer');
+  map.addLayer(layers[storageLayerKey || layers.$2gis]);
 
   map.on('locationfound', ({ latlng }) => {
+    if (state.geolocationIsFirstLocation) {
+      map.setView(latlng, 20);
+      state.geolocationIsFirstLocation = false;
+    }
+
     if (geolocationLayers.me || geolocationLayers.radius) {
       map.removeLayer(geolocationLayers.me);
       map.removeLayer(geolocationLayers.radius);
@@ -59,7 +65,8 @@ export const toggleGeolocation = (watch = false) => {
     changeGeolocationButtonDataEnabled(true);
     state.geolocationIsEnabled = true;
   }
-  state.map.locate({ watch, setView: true, timeout: 5000, enableHighAccuracy: true });
+  state.geolocationIsFirstLocation = true;
+  state.map.locate({ watch, timeout: 5000, enableHighAccuracy: true });
 };
 
 export const requestGeocodeByQuery = debounce((
