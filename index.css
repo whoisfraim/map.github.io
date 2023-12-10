@@ -107,3 +107,11 @@ li {
 #geolocation-button[data-enabled="true"] {
   background: rgb(244, 67, 54) !important;
 }
+
+#suggestions-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4px;
+}

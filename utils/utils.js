@@ -1,25 +1,11 @@
-export const throttle = (func, ms) => {
-  let isThrottled = false, savedArgs, savedThis;
+export const compose = (...fns) => (param) => fns.reduceRight((acc, func) => acc.then(func), Promise.resolve(param));
 
-  function wrapper() {
-    if (isThrottled) {
-      savedArgs = arguments;
-      savedThis = this;
-      return;
-    }
+export const every = (...fns) => (param) => fns.reduce((acc, func) => (func(acc), acc), param);
 
-    func.apply(this, arguments);
-
-    isThrottled = true;
-
-    setTimeout(function() {
-      isThrottled = false;
-      if (savedArgs) {
-        wrapper.apply(savedThis, savedArgs);
-        savedArgs = savedThis = null;
-      }
-    }, ms);
-  }
-
-  return wrapper;
-}
+export const debounce = (func, ms) => {
+  let timeout;
+  return function() {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, arguments), ms);
+  };
+};

@@ -2,6 +2,11 @@ const $mapContainer = document.querySelector('#map');
 
 export default {
   appLoading: true,
+  apiOptions: {
+    serviceUrl: 'https://photon.komoot.io/api/',
+    reverseUrl: 'https://photon.komoot.io/reverse/',
+    nameProperties: ['name', 'street', 'suburb', 'hamlet', 'town', 'city', 'state', 'country'],
+  },
   documentObjects: {
     $loadScreen: document.querySelector('#load-screen'),
     $loadedScreen: document.querySelector('#loaded-screen'),
@@ -21,6 +26,7 @@ export default {
       zoom: 11,
       renderer: L.canvas(),
       touchZoom: true,
+      doubleClickZoom: false,
     },
   ),
   layers: {
@@ -39,9 +45,6 @@ export default {
     me: null,
     radius: null,
   },
-  geocoder: L.Control.Geocoder.photon({
-    defaultMarkGeocode: false,
-    showUniqueResult: true,
-  }),
   geolocationIsEnabled: false,
+  activeMarker: null,
 }
