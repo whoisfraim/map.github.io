@@ -14,17 +14,15 @@ export const debounce = (func, ms) => {
   };
 };
 
-export const eventStopPropagation = (e) => e.stopPropagation();
+export const eventStopPropagation = (e) => (e.stopPropagation(), e);
 
-export const onDoubleTap = (onSingleTap, onDoubleTap) => {
+export const onDoubleTap = (singleTapCallback, doubleTapCallback) => {
   let timer = null;
 
   return (event) => {
     if (!timer) {
       timer = setTimeout(() => {
-        if (onSingleTap) {
-          onSingleTap(event);
-        }
+        if (singleTapCallback) singleTapCallback(event);
         timer = null;
       }, 200);
       return;
@@ -32,6 +30,6 @@ export const onDoubleTap = (onSingleTap, onDoubleTap) => {
 
     clearTimeout(timer);
     timer = null;
-    onDoubleTap && onDoubleTap(event);
+    doubleTapCallback(event);
   };
 };

@@ -11,69 +11,34 @@ import { changeGeolocationButtonDataEnabled } from './dom.js';
 export const initMap = () => {
   if (state.appLoading) return;
 
-  const { map, layers, geolocationLayers } = state;
-
   const storageLayerKey = localStorage.getItem('data-layer') || EMapLayersKeys.$2gis;
-  map.addLayer(layers[storageLayerKey]);
+  state.map.addLayer(state.layers[storageLayerKey]);
 
-  map.on('locationfound', ({ latlng, accuracy }) => {
-    if (state.geolocationIsFirstLocation) {
-      map.setView(latlng, 20);
-      state.geolocationIsFirstLocation = false;
-    }
-
-    clearGeolocationMarker();
-
-    geolocationLayers.me = getMeRadiusMarker(latlng).addTo(map);
-    geolocationLayers.radius = getMeMarker(latlng).addTo(map);
-  });
-
-  map.on('locationerror', () => {
-    alert('Не удалось получить геолокацию!');
-    if (state.geolocationIsEnabled) {
-      toggleGeolocation();
-    }
-  })
+  state.map.on('locationfound', handleLocationFound);
+  state.map.on('locationerror', handleLocationError);
 };
 
-export const switchMapLayer = (condition) => {
-  const { map, layers } = state;
-
-  switch (condition) {
-    case '$2gis':
-      map.removeLayer(layers.$google);
-      map.addLayer(layers.$2gis);
+export const switchMapLayer = (layer) => {
+  switch (layer) {
+    case EMapLayersKeys.$2gis:
+      state.map.removeLayer(state.layers.$google);
+      state.map.addLayer(state.layers.$2gis);
       break;
-    case '$google':
-      map.removeLayer(layers.$2gis);
-      map.addLayer(layers.$google);
+    case EMapLayersKeys.$google:
+      state.map.removeLayer(state.layers.$2gis);
+      state.map.addLayer(state.layers.$google);
       break;
   }
 };
-
-export const clearGeolocationMarker = () => {
-  if (!state.geolocationLayers.me && !state.geolocationLayers.radius) return;
-
-  state.map.removeLayer(state.geolocationLayers.me);
-  state.map.removeLayer(state.geolocationLayers.radius);
-}
-
-export const disableGeolocation = () => {
-  state.map.stopLocate();
-  state.geolocationIsEnabled = false;
-  clearGeolocationMarker();
-  changeGeolocationButtonDataEnabled(false);
-}
 
 export const toggleGeolocation = (watch = false) => {
-  if (state.geolocationIsEnabled) {
-    return disableGeolocation()
-  }
+  if (state.geolocationIsEnabled) return disableGeolocation();
 
   if (watch) {
-    changeGeolocationButtonDataEnabled(true);
     state.geolocationIsEnabled = true;
+    changeGeolocationButtonDataEnabled(true);
   }
+
   state.geolocationIsFirstLocation = true;
   state.map.locate({ watch, timeout: 5000, enableHighAccuracy: true });
 };
@@ -85,7 +50,7 @@ export const requestGeocodeByQuery = debounce((
   errorCallback,
   finallyCallback,
 ) => {
-  if (state.searchLoading || !query) return;
+  if (state.search.isLoading || !query) return;
 
   const { lat, lng } = state.map.getCenter();
 
@@ -98,8 +63,6 @@ export const requestGeocodeByQuery = debounce((
 
   getSuggestions(searchParams, requestCallback, successCallback, errorCallback, finallyCallback);
 }, 1000);
-
-export const setView = (position, zoom) => state.map.setView(position, zoom, { animate: true });
 
 export const clearActiveMarker = () => {
   if (state.activeMarker === null) return;
@@ -117,5 +80,36 @@ export const setActiveMarker = (position, title) => {
   setView(position, 20);
 }
 
-export const getMeMarker = (pos) => L.circleMarker(pos, { radius: 25, color: '#536dfe', stroke: false, fillOpacity: 0.3 });
-export const getMeRadiusMarker = (pos) => L.circleMarker(pos, { radius: 10, color: '#ff1744', stroke: false, fillOpacity: 1 });
+const setView = (position, zoom) => state.map.setView(position, zoom, { animate: true });
+const createMeMarker = (pos) => L.circleMarker(pos, { radius: 25, color: '#536dfe', stroke: false, fillOpacity: 0.3 });
+const createMeRadiusMarker = (pos) => L.circleMarker(pos, { radius: 10, color: '#ff1744', stroke: false, fillOpacity: 1 });
+
+const handleLocationFound = ({ latlng }) => {
+  if (state.geolocationIsFirstLocation) {
+    state.map.setView(latlng, 20);
+    state.geolocationIsFirstLocation = false;
+  }
+
+  clearGeolocationMarker();
+  state.geolocationLayers.me = createMeRadiusMarker(latlng).addTo(state.map);
+  state.geolocationLayers.radius = createMeMarker(latlng).addTo(state.map);
+}
+
+const handleLocationError = () => {
+  alert('Не удалось получить геолокацию!');
+  toggleGeolocation();
+};
+
+const clearGeolocationMarker = () => {
+  if (!state.geolocationLayers.me && !state.geolocationLayers.radius) return;
+
+  state.map.removeLayer(state.geolocationLayers.me);
+  state.map.removeLayer(state.geolocationLayers.radius);
+}
+
+const disableGeolocation = () => {
+  state.geolocationIsEnabled = false;
+  state.map.stopLocate();
+  clearGeolocationMarker();
+  changeGeolocationButtonDataEnabled(false);
+}

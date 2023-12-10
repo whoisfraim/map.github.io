@@ -1,30 +1,5 @@
 import { EMappedSuggestionTypes, ESuggestionTypes } from '../constants/enums.js';
 
-export const getDefaultAddressTemplate = (props) => (`
-  ${!!props?.district ? `<div>${EMappedSuggestionTypes.district} ${props.district}</div>` : ''}
-  ${!!(props?.city || props?.name) ? `<div>${EMappedSuggestionTypes.city} ${props.city || props.name}</div>` : ''}
-  ${!!props?.state ? `<div>${EMappedSuggestionTypes.state} ${props.state}</div>` : ''}
-  ${!!props?.country ? `<div>${props.country}</div>` : ''}
-  ${!!props?.postcode ? `<div>${props.postcode}</div>` : ''}
-`);
-
-export const getAddressHouseTemplate = (props) => (`
-  <div>${props?.street}${props?.housenumber
-  ? `, ${EMappedSuggestionTypes.house} ${props.housenumber}`
-  : ''}
-  </div>
-  ${getDefaultAddressTemplate(props)}
-`);
-
-export const renderAddressInfoBySuggestionType = (props) => {
-  switch (props.type) {
-    case ESuggestionTypes.house:
-      return getAddressHouseTemplate(props);
-    default:
-      return getDefaultAddressTemplate(props);
-  }
-};
-
 export const getSuggestionsListItemTemplate = ({ center, properties }) => (`
   <li class="mdl-list__item">
     <div class="mdl-list__item-primary-content" id="suggestions-wrapper">
@@ -52,3 +27,27 @@ export const getSuggestionsListItemTemplate = ({ center, properties }) => (`
     </div>
   </li>
 `);
+
+const getDefaultAddressTemplate = (props) => (`
+  ${!!props?.district ? `<div>${EMappedSuggestionTypes.district} ${props.district}</div>` : ''}
+  ${!!(props?.city || props?.name) ? `<div>${EMappedSuggestionTypes.city} ${props.city || props.name}</div>` : ''}
+  ${!!props?.state ? `<div>${EMappedSuggestionTypes.state} ${props.state}</div>` : ''}
+  ${!!props?.country ? `<div>${props.country}</div>` : ''}
+  ${!!props?.postcode ? `<div>${props.postcode}</div>` : ''}
+`);
+
+const getAddressHouseTemplate = (props) => (`
+  <div>
+    ${props?.street}${props?.housenumber ? `, ${EMappedSuggestionTypes.house} ${props.housenumber}`: ''}
+  </div>
+  ${getDefaultAddressTemplate(props)} 
+`);
+
+const renderAddressInfoBySuggestionType = (props) => {
+  switch (props.type) {
+    case ESuggestionTypes.house:
+      return getAddressHouseTemplate(props);
+    default:
+      return getDefaultAddressTemplate(props);
+  }
+};

@@ -12,52 +12,36 @@ import {
 
 import { getSuggestionsListItemTemplate } from './templates.js';
 
+export const hideLoadScreen = () => {
+  state.DOM.$loadScreen.style.visibility = 'hidden';
+  state.DOM.$loadedScreen.style.visibility = 'visible';
+};
+
 export const initDOM = () => {
   if (state.appLoading) return;
 
-  const { documentObjects } = state;
-
-  const menu = new MaterialMenu(documentObjects.$tilesMenu);
+  const { DOM } = state;
 
   // search
-  if (!documentObjects.$searchDialog.showModal) {
-    dialogPolyfill.registerDialog(documentObjects.$searchDialog);
+  if (!DOM.$searchDialog.showModal) {
+    dialogPolyfill.registerDialog(DOM.$searchDialog);
   }
 
-  documentObjects.$searchButton.addEventListener(
+  DOM.$searchButton.addEventListener(
     'click',
-    documentObjects.$searchDialog.showModal.bind(documentObjects.$searchDialog),
+    DOM.$searchDialog.showModal.bind(DOM.$searchDialog),
   );
 
-  documentObjects.$searchDialog.addEventListener('click', ({ target }) => {
-    if (target.nodeName === 'DIALOG') {
-      target.close()
-    } else if (target.getAttribute('id') === 'location-button') {
-      onClickFindPosition(target.children[0]);
-    } else if (target.getAttribute('id') === 'location-icon') {
-      onClickFindPosition(target);
-    }
-  });
+  DOM.$searchDialog.addEventListener('click', handleClickOnDialog);
 
-  documentObjects.$searchInput.addEventListener('input', ({ target: { value } }) => {
-    state.searchQuery = value;
-    if (!state.searchQuery) renderSearchResult();
-    requestGeocodeByQuery(state.searchQuery, showSearchLoading, renderSearchResult, showSearchError, hideSearchLoading);
-  });
+  DOM.$searchInput.addEventListener('input', handleSearchInput);
 
   // tiles
-  documentObjects.$tilesButton.addEventListener('click', menu.toggle.bind(menu));
-
-  documentObjects.$tilesMenu.addEventListener('click', ({ target }) => {
-    if (target.hasAttribute('data-layer')) {
-      const layerKey = target.getAttribute('data-layer');
-      localStorage.setItem('data-layer', layerKey);
-      switchMapLayer(layerKey);
-    }
-  });
+  DOM.$tilesButton.addEventListener('click', DOM.tilesMenu.toggle.bind(DOM.tilesMenu));
+  DOM.tilesMenu.element_.addEventListener('click', handleClickOnTilesMenu);
 
   // geolocation
-  documentObjects.$geolocationButton.addEventListener(
+  DOM.$geolocationButton.addEventListener(
     'click',
     onDoubleTap(
       toggleGeolocation.bind(null, false),
@@ -68,76 +52,101 @@ export const initDOM = () => {
   hideLoadScreen();
 };
 
-const renderSearchResult = (data) => {
-  const { $suggestionList } = state.documentObjects;
+const handleClickOnDialog = ({ target }) => {
+  switch (true) {
+    case target.nodeName === 'DIALOG':
+      return target.close();
+    case target.getAttribute('id') === 'location-icon':
+      return onClickFindPosition(target);
+    case target.getAttribute('id') === 'location-button':
+      return onClickFindPosition(target.children[0]);
+    default:
+      return;
+  }
+};
 
-  if (!data || !data.length || state.appLoading || state.searchError) {
-    hideSearchError();
-    hideSearchLoading();
-    return $suggestionList.innerHTML = '';
+const handleSearchInput = (event) => {
+  state.search.query = event.target?.value || '';
+
+  if (!state.search.query) renderSearchResult();
+
+  requestGeocodeByQuery(
+    state.search.query,
+    showSearchLoading,
+    renderSearchResult,
+    showSearchError,
+    hideSearchLoading,
+  );
+};
+
+const handleClickOnTilesMenu = ({ target }) => {
+  if (!target.hasAttribute('data-layer')) return;
+
+  const layerKey = target.getAttribute('data-layer');
+  localStorage.setItem('data-layer', layerKey);
+  switchMapLayer(layerKey);
+};
+
+const renderSearchResult = (data) => {
+  if (data && data?.length && !state.appLoading && !state.search.isError) {
+    state.DOM.$suggestionList.innerHTML = data.map(getSuggestionsListItemTemplate).join('');
+    return;
   }
 
-  $suggestionList
-    .innerHTML = data.map(getSuggestionsListItemTemplate)
-    .join('');
+  hideSearchError();
+  hideSearchLoading();
+  state.DOM.$suggestionList.innerHTML = '';
 }
 
 const onClickFindPosition = (target) => {
   const position = JSON.parse(target.getAttribute('data-position'));
 
-  const button = document.createElement('button');
   const tooltipContent = document.createElement('div');
+  const button = document.createElement('button');
   const info = document.createElement('div');
 
-  button.className = 'mdl-button mdl-js-button mdl-button--raised mdl-button--accent';
+  info.innerHTML = target.closest('.mdl-list__item').children[0].innerHTML;
+  info.style.marginBottom = '8px';
+
+  button.className = 'test mdl-button mdl-js-button mdl-button--raised mdl-button--accent';
   button.addEventListener('click', compose(clearActiveMarker, eventStopPropagation));
   button.innerText = 'Удалить';
-
-  info.innerHTML = target.closest('.mdl-list__item').children[0].innerHTML;
-  info.style.marginBottom = '8px'
 
   tooltipContent.append(info, button);
 
   setActiveMarker(position, tooltipContent);
 
-  state.documentObjects.$searchDialog.close();
+  state.DOM.$searchDialog.close();
 };
 
 export const changeGeolocationButtonDataEnabled = (value) => (
-  state.documentObjects.$geolocationButton.setAttribute('data-enabled', value)
+  state.DOM.$geolocationButton.setAttribute('data-enabled', value)
 );
 
-export const hideLoadScreen = () => {
-  const { $loadScreen, $loadedScreen } = state.documentObjects;
-
-  $loadScreen.style.visibility = 'hidden';
-  $loadedScreen.style.visibility = 'visible';
-};
-
 export const hideSearchLoading = () => {
-  state.searchLoading = false;
-  state.documentObjects.$searchLoader.style.visibility = 'hidden';
+  state.search.isLoading = false;
+  state.DOM.$searchLoader.style.visibility = 'hidden';
 }
 
 export const showSearchLoading = () => {
-  if (state.searchLoading) return;
+  if (state.search.isLoading) return;
 
   hideSearchError();
   renderSearchResult();
-  state.searchLoading = true;
-  state.documentObjects.$searchLoader.style.visibility = 'visible';
+  state.search.isLoading = true;
+  state.DOM.$searchLoader.style.visibility = 'visible';
 };
 
 export const hideSearchError = () => {
-  state.searchError = false;
-  state.documentObjects.$searchError.style.visibility = 'hidden';
+  state.search.isError = false;
+  state.DOM.$searchError.style.visibility = 'hidden';
 }
 
 export const showSearchError = () => {
-  if (state.searchError) return;
+  if (state.search.isError) return;
 
   hideSearchLoading();
   renderSearchResult();
-  state.searchError = true;
-  state.documentObjects.$searchError.style.visibility = 'visible';
+  state.search.isError = true;
+  state.DOM.$searchError.style.visibility = 'visible';
 };
