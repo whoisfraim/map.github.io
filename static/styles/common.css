@@ -1,11 +1,3 @@
-html, body {
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    position: relative;
-    background-color: #FAFAFA
-}
-
 .mdl-button--colored {
     display: flex;
     justify-content: center;
@@ -14,32 +6,6 @@ html, body {
 
 .leaflet-control-attribution {
     display: none;
-}
-
-#load-screen {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-}
-
-.loader {
-    width: 60px;
-    height: 60px;
-}
-
-#loaded-screen {
-    width: 100%;
-    height: 100%;
-    visibility: hidden;
-}
-
-#map {
-    width: 100%;
-    height: 100%;
-    display: flex;
 }
 
 .actions-wrapper {
@@ -137,6 +103,7 @@ li {
     justify-content: center;
     align-items: center;
     visibility: hidden;
+    flex-direction: column;
 }
 
 #search-error {

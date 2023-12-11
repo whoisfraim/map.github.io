@@ -1,12 +1,12 @@
-import state from '../constants/state.js';
+import state from '../state';
 
-import { EMapLayersKeys } from '../constants/enums.js';
+import { EMapLayersKeys } from '../enums';
 
-import { debounce } from './utils.js';
+import { debounce } from '../utils/delays';
 
-import { getSuggestions } from './api.js';
+import { getSuggestions } from '../api';
 
-import { changeGeolocationButtonDataEnabled } from './dom.js';
+import { changeGeolocationButtonDataEnabled } from '../dom';
 
 export const initMap = () => {
   if (state.appLoading) return;

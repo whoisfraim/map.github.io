@@ -1,77 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-    <link rel="stylesheet" href="./styles/leaflet.css" />
-    <link rel="stylesheet" href="./styles/material.css"/>
-    <link rel="stylesheet" href="./styles/dialog-polyfill.css" />
-    <link rel="stylesheet" href="./index.css" />
-
-    <title>Map</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>window.location.replace('./dist')</script>
 </head>
 <body>
-    <div id="load-screen">
-        <div class="loader mdl-spinner mdl-js-spinner is-active"></div>
-    </div>
 
-    <div id="loaded-screen">
-        <div id="map"></div>
-
-        <div class="actions-wrapper">
-            <div class="search-button-container">
-                <button id="search-button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-                    <img src="./static/search.svg" alt="🔍" width="24" height="24" />
-                </button>
-            </div>
-
-            <div class="tiles-button-container">
-                <button id="tiles-button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-                    <img src="./static/layers.svg" alt="=" width="24" height="24" />
-                </button>
-            </div>
-            <div class="tiles-menu-container">
-                <ul id="tiles-menu" class="mdl-menu mdl-menu--bottom-right">
-                    <li class="mdl-menu__item" data-layer="$2gis">2GIS</li>
-                    <li class="mdl-menu__item" data-layer="$google">Google</li>
-                </ul>
-            </div>
-
-            <div class="geolocation-button-container">
-                <button data-enabled="false" id="geolocation-button"
-                        class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
-                    <img src="./static/geolocation.svg" alt="geo" width="24" height="24" />
-                </button>
-            </div>
-        </div>
-
-        <dialog class="mdl-dialog" id="search-dialog-content">
-            <div class="dialog-content">
-                <form id="searh-form" action="" onsubmit="return false;">
-                    <div class="search-input-container mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input search-input" type="search" id="search-input">
-                        <label class="mdl-textfield__label search-label" for="search-input">Поиск...</label>
-                    </div>
-                </form>
-                <div id="search-loader-container">
-                    <div id="search-loader" class="loader mdl-spinner mdl-js-spinner is-active"></div>
-                </div>
-                <div id="search-error">
-                    <img src="./static/error.svg" alt="Ошибка" width="50" height="50"/>
-                    Произошла ошибка!
-                    <br />
-                    Попробуйте вести другой запрос.
-                </div>
-                <ul id="suggestions-list" class="mdl-list"></ul>
-            </div>
-        </dialog>
-    </div>
-
-    <script src="./scripts/leaflet.js"></script>
-    <script src="./scripts/material.js"></script>
-    <script src="./scripts/dialog-polyfill.js"></script>
-    <script src="./index.js" type="module"></script>
 </body>
 </html>

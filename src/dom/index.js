@@ -1,6 +1,8 @@
-import state from '../constants/state.js';
+import state from '../state';
 
-import { compose, eventStopPropagation, onDoubleTap } from './utils.js';
+import { compose } from '../utils/pure';
+import { eventStopPropagation, onDoubleTap } from '../utils/events';
+import { getSuggestionsListItemTemplate } from '../utils/templates';
 
 import {
   requestGeocodeByQuery,
@@ -8,9 +10,7 @@ import {
   toggleGeolocation,
   setActiveMarker,
   clearActiveMarker,
-} from './map.js';
-
-import { getSuggestionsListItemTemplate } from './templates.js';
+} from '../map';
 
 export const hideLoadScreen = () => {
   state.DOM.$loadScreen.style.visibility = 'hidden';

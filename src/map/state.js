@@ -1,8 +1,8 @@
-import DOM from './DOM.js';
+import DOM from '../dom/state';
 
-import { EMapLayersKeys } from './enums.js';
+import { EMapLayersKeys } from '../enums';
 
-const map = L.map(
+const state = L.map(
   DOM.$mapContainer,
   {
     center: [45.05853056136878, 38.97168592724484],
@@ -51,7 +51,7 @@ const icons = {
 };
 
 export default {
-  map,
+  map: state,
   layers,
   icons,
   geolocationLayers: {

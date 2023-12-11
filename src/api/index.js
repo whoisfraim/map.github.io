@@ -1,9 +1,9 @@
-import translate from '../scripts/translate.js';
+import translate from '../../static/scripts/translate';
 
-import { ESuggestionPropertiesForTranslate } from '../constants/enums.js';
-import { defaultFetchOptions, geocodingApiOptions } from '../constants/api.js';
+import { ESuggestionPropertiesForTranslate } from '../enums';
+import { defaultFetchOptions, geocodingApiOptions } from './constants';
 
-import { compose, every, reverseCurrying } from './utils.js';
+import { compose, every, reverseCurrying } from '../utils/pure';
 
 export const translateToRU = reverseCurrying(translate, 'ru');
 
