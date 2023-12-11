@@ -11,7 +11,7 @@ export const getSuggestionsListItemTemplate = ({ center, properties }) => (`
         class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"
       >
         <img
-          src="/static/pin_drop.svg"
+          src="./static/pin_drop.svg"
           id="location-icon"
           data-position="[${center.lat}, ${center.lng}]"
           width="24"
@@ -22,7 +22,7 @@ export const getSuggestionsListItemTemplate = ({ center, properties }) => (`
     </div>
     <div>
       <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-        <img src="/static/add.svg" width="24" height="24" alt="+" />
+        <img src="./static/add.svg" width="24" height="24" alt="+" />
       </button>
     </div>
   </li>
