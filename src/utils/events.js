@@ -8,7 +8,7 @@ export const onDoubleTap = (singleTapCallback, doubleTapCallback) => {
       timer = setTimeout(() => {
         if (singleTapCallback) singleTapCallback(event);
         timer = null;
-      }, 200);
+      }, 300);
       return;
     }
 
