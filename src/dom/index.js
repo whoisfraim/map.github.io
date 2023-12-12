@@ -5,6 +5,8 @@ import { tilesMenuItemActiveClassList } from './constants';
 
 import { compose } from '@/utils/pure';
 import { eventStopPropagation, onDoubleTap } from '@/utils/events';
+import { getIsMobile } from '@/utils/userAgent';
+
 import { getSuggestionsListItemTemplate } from './templates';
 
 import {
@@ -20,27 +22,30 @@ export const initDOM = () => {
 
   const { DOM } = state;
 
+  const isMobile = getIsMobile();
+  const eventTypeByDevice = isMobile ? 'touchend' : 'click';
+
   // search
   if (!DOM.$elements.searchDialog.showModal) {
     dialogPolyfill.registerDialog(DOM.$elements.searchDialog);
   }
 
   DOM.$elements.searchButton.addEventListener(
-    'click',
+    eventTypeByDevice,
     DOM.$elements.searchDialog.showModal.bind(DOM.$elements.searchDialog),
   );
 
-  DOM.$elements.searchDialog.addEventListener('click', handleClickOnDialog);
+  DOM.$elements.searchDialog.addEventListener(eventTypeByDevice, handleClickOnDialog);
 
   DOM.$elements.searchInput.addEventListener('input', handleSearchInput);
 
   // tiles
-  DOM.$elements.tilesButton.addEventListener('click', DOM.mui.tilesMenu.toggle.bind(DOM.mui.tilesMenu));
-  DOM.mui.tilesMenu.element_.addEventListener('click', handleClickOnTilesMenu);
+  DOM.$elements.tilesButton.addEventListener(eventTypeByDevice, DOM.mui.tilesMenu.toggle.bind(DOM.mui.tilesMenu));
+  DOM.mui.tilesMenu.element_.addEventListener(eventTypeByDevice, handleClickOnTilesMenu);
 
   // geolocation
   DOM.$elements.geolocationButton.addEventListener(
-    'click',
+    eventTypeByDevice,
     onDoubleTap(
       toggleGeolocation.bind(null, false),
       toggleGeolocation.bind(null, true),
