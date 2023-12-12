@@ -1,5 +1,5 @@
-import DOM from './dom/state';
-import map from './map/state';
+import DOM from '@/dom/state';
+import map from '@/map/state';
 
 export default {
   DOM,

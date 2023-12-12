@@ -1,6 +1,9 @@
 const path = require('path');
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = {
   entry: './src/index.js',
@@ -11,23 +14,35 @@ module.exports = {
     clean: true,
   },
   plugins: [
+    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       title: 'Map',
       template: __dirname + '/src/index.html',
       filename: 'index.html',
     }),
     new CopyWebpackPlugin({
-      patterns: [{ from: 'static', to: 'static' }]
-    })
+      patterns: [{ from: './src/static', to: 'static' }]
+    }),
   ],
-  devServer: { static: './dist' },
+  devServer: { static: './dist', watchFiles: ['src/*'] },
   optimization: {
     runtimeChunk: 'single',
+    minimizer: [
+      new CssMinimizerPlugin(),
+    ],
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
-    extensions: ['.js', '.json']
+    extensions: ['.js'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      }
+    ],
   },
 };

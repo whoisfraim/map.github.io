@@ -1,9 +1,9 @@
-import translate from '../../static/scripts/translate';
+import translate from 'translate';
 
-import { ESuggestionPropertiesForTranslate } from '../enums';
+import { ESuggestionPropertiesForTranslate } from '@/enums';
 import { defaultFetchOptions, geocodingApiOptions } from './constants';
 
-import { compose, every, reverseCurrying } from '../utils/pure';
+import { compose, every, reverseCurrying } from '@/utils/pure';
 
 export const translateToRU = reverseCurrying(translate, 'ru');
 

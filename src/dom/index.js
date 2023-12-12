@@ -1,4 +1,7 @@
+import dialogPolyfill from 'dialog-polyfill';
+
 import state from '@/state';
+import { tilesMenuItemActiveClassList } from './constants';
 
 import { compose } from '@/utils/pure';
 import { eventStopPropagation, onDoubleTap } from '@/utils/events';
@@ -12,36 +15,31 @@ import {
   clearActiveMarker,
 } from '@/map';
 
-export const hideLoadScreen = () => {
-  state.DOM.$loadScreen.style.visibility = 'hidden';
-  state.DOM.$loadedScreen.style.visibility = 'visible';
-};
-
 export const initDOM = () => {
   if (state.appLoading) return;
 
   const { DOM } = state;
 
   // search
-  if (!DOM.$searchDialog.showModal) {
-    dialogPolyfill.registerDialog(DOM.$searchDialog);
+  if (!DOM.$elements.searchDialog.showModal) {
+    dialogPolyfill.registerDialog(DOM.$elements.searchDialog);
   }
 
-  DOM.$searchButton.addEventListener(
+  DOM.$elements.searchButton.addEventListener(
     'click',
-    DOM.$searchDialog.showModal.bind(DOM.$searchDialog),
+    DOM.$elements.searchDialog.showModal.bind(DOM.$elements.searchDialog),
   );
 
-  DOM.$searchDialog.addEventListener('click', handleClickOnDialog);
+  DOM.$elements.searchDialog.addEventListener('click', handleClickOnDialog);
 
-  DOM.$searchInput.addEventListener('input', handleSearchInput);
+  DOM.$elements.searchInput.addEventListener('input', handleSearchInput);
 
   // tiles
-  DOM.$tilesButton.addEventListener('click', DOM.tilesMenu.toggle.bind(DOM.tilesMenu));
-  DOM.tilesMenu.element_.addEventListener('click', handleClickOnTilesMenu);
+  DOM.$elements.tilesButton.addEventListener('click', DOM.mui.tilesMenu.toggle.bind(DOM.mui.tilesMenu));
+  DOM.mui.tilesMenu.element_.addEventListener('click', handleClickOnTilesMenu);
 
   // geolocation
-  DOM.$geolocationButton.addEventListener(
+  DOM.$elements.geolocationButton.addEventListener(
     'click',
     onDoubleTap(
       toggleGeolocation.bind(null, false),
@@ -49,7 +47,14 @@ export const initDOM = () => {
     ),
   );
 
+  setActiveLayerByKey(DOM.mui.tilesMenuActiveKey);
+
   hideLoadScreen();
+};
+
+const hideLoadScreen = () => {
+  state.DOM.$elements.loadScreen.style.visibility = 'hidden';
+  state.DOM.$elements.loadedScreen.style.visibility = 'visible';
 };
 
 const handleClickOnDialog = ({ target }) => {
@@ -70,35 +75,52 @@ const handleClickOnDialog = ({ target }) => {
 const handleSearchInput = (event) => {
   state.search.query = event.target?.value || '';
 
-  if (!state.search.query) renderSearchResult();
+  if (!state.search.query) return;
 
   requestGeocodeByQuery(
     state.search.query,
     showSearchLoading,
-    renderSearchResult,
+    onSuccessRequestGeocodeByQuery,
     showSearchError,
     hideSearchLoading,
   );
 };
 
-const handleClickOnTilesMenu = ({ target }) => {
-  if (!target.hasAttribute('data-layer')) return;
+const onSuccessRequestGeocodeByQuery = (data) => {
+  hideSearchError();
+  hideSearchLoading();
+  renderSearchResult(data);
+}
 
+const handleClickOnTilesMenu = ({ target }) => {
   const layerKey = target.getAttribute('data-layer');
+
+  if (!layerKey || state.DOM.mui.tilesMenuActiveKey === layerKey) return;
+
+  state.DOM.mui.tilesMenuActiveKey = layerKey;
   localStorage.setItem('data-layer', layerKey);
+  setActiveLayerByKey(layerKey);
   switchMapLayer(layerKey);
 };
 
+const setActiveLayerByKey = (key) => {
+  document.querySelectorAll(`[data-layer]`).forEach((tilesMenuItem) => {
+    if (tilesMenuItem.getAttribute('data-layer') === key) {
+      tilesMenuItem.classList.add(...tilesMenuItemActiveClassList);
+    } else {
+      tilesMenuItem.classList.remove(...tilesMenuItemActiveClassList);
+    }
+  });
+};
+
 const renderSearchResult = (data) => {
-  if (data && data?.length && !state.appLoading && !state.search.isError) {
-    state.DOM.$suggestionList.innerHTML = data.map(getSuggestionsListItemTemplate).join('');
+  if (data && data?.length && !state.search.isLoading && !state.search.isError) {
+    state.DOM.$elements.suggestionList.innerHTML = data.map(getSuggestionsListItemTemplate).join('');
     return;
   }
 
-  hideSearchError();
-  hideSearchLoading();
-  state.DOM.$suggestionList.textContent = '';
-}
+  state.DOM.$elements.suggestionList.textContent = '';
+};
 
 const onClickFindPosition = (target) => {
   const position = JSON.parse(target.getAttribute('data-position'));
@@ -118,37 +140,39 @@ const onClickFindPosition = (target) => {
 
   setActiveMarker(position, tooltipContent);
 
-  state.DOM.$searchDialog.close();
+  state.DOM.$elements.searchDialog.close();
 };
 
 export const changeGeolocationButtonDataEnabled = (value) => (
-  state.DOM.$geolocationButton.setAttribute('data-enabled', value)
+  state.DOM.$elements.geolocationButton.setAttribute('data-enabled', value)
 );
 
 export const hideSearchLoading = () => {
   state.search.isLoading = false;
-  state.DOM.$searchLoader.style.visibility = 'hidden';
-}
+  state.DOM.$elements.searchLoader.style.visibility = 'hidden';
+};
 
 export const showSearchLoading = () => {
   if (state.search.isLoading) return;
 
   hideSearchError();
   renderSearchResult();
+
   state.search.isLoading = true;
-  state.DOM.$searchLoader.style.visibility = 'visible';
+  state.DOM.$elements.searchLoader.style.visibility = 'visible';
 };
 
 export const hideSearchError = () => {
   state.search.isError = false;
-  state.DOM.$searchError.style.visibility = 'hidden';
-}
+  state.DOM.$elements.searchError.style.visibility = 'hidden';
+};
 
 export const showSearchError = () => {
   if (state.search.isError) return;
 
   hideSearchLoading();
   renderSearchResult();
+
   state.search.isError = true;
-  state.DOM.$searchError.style.visibility = 'visible';
+  state.DOM.$elements.searchError.style.visibility = 'visible';
 };

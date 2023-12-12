@@ -1,14 +1,17 @@
-import '../static/scripts/import-styles';
-import '../static/scripts/leaflet';
-import '../static/scripts/dialog-polyfill';
-import '../static/scripts/material';
+// styles
+import 'leaflet/dist/leaflet.css';
+import 'dialog-polyfill/dist/dialog-polyfill.css';
+import 'material-design-lite/dist/material.blue-indigo.min.css';
+import './index.css';
 
-import { initMap } from './map';
-import { initDOM } from './dom';
+import 'material-design-lite/material.min';
 
-import state from './state';
+import { initMap } from '@/map';
+import { initDOM } from '@/dom';
 
-window.addEventListener('load', async () => {
+import state from '@/state';
+
+window.addEventListener('load', () => {
   state.appLoading = false;
   initMap();
   initDOM();

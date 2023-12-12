@@ -1,1 +1,0 @@
-const importStyles=s=>{const t=document.createElement("link");t.href=s,t.rel="stylesheet",document.getElementsByTagName("head")[0].appendChild(t)},styles=["static/styles/leaflet.css","static/styles/material.css","static/styles/dialog-polyfill.css","static/styles/common.min.css"];styles.forEach(importStyles);
