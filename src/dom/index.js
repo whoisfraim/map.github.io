@@ -23,7 +23,7 @@ export const initDOM = () => {
   const { DOM } = state;
 
   const isMobile = getIsMobile();
-  const eventTypeByDevice = isMobile ? 'touchend' : 'click';
+  const eventTypeByDevice = isMobile ? 'touchstart' : 'click';
 
   // search
   if (!DOM.$elements.searchDialog.showModal) {
