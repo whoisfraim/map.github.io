@@ -104,6 +104,7 @@ li {
     align-items: center;
     visibility: hidden;
     flex-direction: column;
+    gap: 24px;
 }
 
 #search-error {

@@ -25,6 +25,9 @@ module.exports = {
     runtimeChunk: 'single',
   },
   resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
     extensions: ['.js', '.json']
   },
 };

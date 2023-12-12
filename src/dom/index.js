@@ -1,8 +1,8 @@
-import state from '../state';
+import state from '@/state';
 
-import { compose } from '../utils/pure';
-import { eventStopPropagation, onDoubleTap } from '../utils/events';
-import { getSuggestionsListItemTemplate } from '../utils/templates';
+import { compose } from '@/utils/pure';
+import { eventStopPropagation, onDoubleTap } from '@/utils/events';
+import { getSuggestionsListItemTemplate } from './templates';
 
 import {
   requestGeocodeByQuery,
@@ -10,7 +10,7 @@ import {
   toggleGeolocation,
   setActiveMarker,
   clearActiveMarker,
-} from '../map';
+} from '@/map';
 
 export const hideLoadScreen = () => {
   state.DOM.$loadScreen.style.visibility = 'hidden';
@@ -56,6 +56,8 @@ const handleClickOnDialog = ({ target }) => {
   switch (true) {
     case target.nodeName === 'DIALOG':
       return target.close();
+    case target.getAttribute('id') === 'location-icon-path':
+      return onClickFindPosition(target.parentNode);
     case target.getAttribute('id') === 'location-icon':
       return onClickFindPosition(target);
     case target.getAttribute('id') === 'location-button':
@@ -95,7 +97,7 @@ const renderSearchResult = (data) => {
 
   hideSearchError();
   hideSearchLoading();
-  state.DOM.$suggestionList.innerHTML = '';
+  state.DOM.$suggestionList.textContent = '';
 }
 
 const onClickFindPosition = (target) => {

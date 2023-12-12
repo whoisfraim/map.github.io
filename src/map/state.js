@@ -1,6 +1,6 @@
-import DOM from '../dom/state';
+import DOM from '@/dom/state';
 
-import { EMapLayersKeys } from '../enums';
+import { EMapLayersKeys } from '@/enums';
 
 const state = L.map(
   DOM.$mapContainer,
@@ -28,21 +28,21 @@ const layers = {
 
 const icons = {
   red: L.icon({
-    iconUrl: './static/red-marker.png',
+    iconUrl: 'static/icons/red-marker.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     tooltipAnchor: [16, -28],
   }),
   primary: L.icon({
-    iconUrl: './static/primary-marker.png',
+    iconUrl: 'static/icons/primary-marker.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     tooltipAnchor: [16, -28],
   }),
   disabled: L.icon({
-    iconUrl: './static/disabled-marker.png',
+    iconUrl: 'static/icons/disabled-marker.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
