@@ -1,10 +1,14 @@
-import { map, tileLayer, icon } from 'leaflet';
+import { map as Map, tileLayer, icon } from 'leaflet';
+
+import redMarker from '@/assets/markers/red-marker.png'
+import primaryMarker from '@/assets/markers/primary-marker.png'
+import disabledMarker from '@/assets/markers/disabled-marker.png'
 
 import DOM from '@/dom/state';
 
 import { EMapLayersKeys } from '@/enums';
 
-const state = map(
+const map = Map(
   DOM.$elements.mapContainer,
   {
     center: [45.05853056136878, 38.97168592724484],
@@ -30,21 +34,21 @@ const layers = {
 
 const icons = {
   red: icon({
-    iconUrl: 'static/icons/red-marker.png',
+    iconUrl: redMarker,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     tooltipAnchor: [16, -28],
   }),
   primary: icon({
-    iconUrl: 'static/icons/primary-marker.png',
+    iconUrl: primaryMarker,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     tooltipAnchor: [16, -28],
   }),
   disabled: icon({
-    iconUrl: 'static/icons/disabled-marker.png',
+    iconUrl: disabledMarker,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -52,14 +56,16 @@ const icons = {
   }),
 };
 
+const geolocationLayers = {
+  me: null,
+  radius: null,
+};
+
 export default {
-  map: state,
+  map,
   layers,
   icons,
-  geolocationLayers: {
-    me: null,
-    radius: null,
-  },
+  geolocationLayers,
   geolocationIsEnabled: false,
   geolocationIsFirstLocation: true,
   activeMarker: null,

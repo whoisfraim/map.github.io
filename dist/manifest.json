@@ -1,0 +1,16 @@
+{
+  "name": "Map",
+  "short_name": "Search on Map",
+  "theme_color": "#536dfe",
+  "background_color": "#544444",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": ".",
+  "icons": [
+    {
+      "src": "/assets/256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ]
+}

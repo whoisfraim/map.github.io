@@ -1,0 +1,1 @@
+self.addEventListener("install",(e=>{e.waitUntil(caches.open("map-cache"))})),self.addEventListener("activate",(e=>{console.log("activate")}));
